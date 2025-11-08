@@ -85,7 +85,7 @@ export default function LevelTestContainer() {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [runState, shooterSaved, config, hits, seq, t0, sessions]);
+  }, [runState, shooterSaved, config, hits, seq, t0]);
 
   /** Reset hits array when sequence changes in idle state */
   useEffect(() => {
