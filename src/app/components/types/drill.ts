@@ -6,9 +6,9 @@ export type Target = {
   distance: number;
   type: "chest" | "half-head" | "full-body";
   stance: Stance;
-  shots?: number;         // по умолчанию 1
-  size?: TargetSize;      // по умолчанию 'full'
-  sizeCm?: number;        // если size === 'custom'
+  shots?: number; // по умолчанию 1
+  size?: TargetSize; // по умолчанию 'full'
+  sizeCm?: number; // если size === 'custom'
 };
 
 export type DrillMeta = {
@@ -24,6 +24,34 @@ export type TestConfig = {
   reloadAfter: number | null; // между N и N+1; null = без перезарядки
   meta?: DrillMeta;
 };
+
+export type Session = {
+  id: string;
+  name: string;
+  shooterName: string;
+  date: string;
+  startedAt: string;
+  config: TestConfig;
+};
+
+export const PRESET_LEVEL: Target[] = [
+  { order: 1, distance: 10, type: "chest", stance: "standing", shots: 1 },
+  { order: 2, distance: 15, type: "chest", stance: "standing", shots: 1 },
+  { order: 3, distance: 20, type: "chest", stance: "standing", shots: 1 },
+  { order: 4, distance: 25, type: "chest", stance: "standing", shots: 1 },
+  { order: 5, distance: 30, type: "chest", stance: "standing", shots: 1 },
+  { order: 6, distance: 35, type: "chest", stance: "standing", shots: 1 },
+  { order: 7, distance: 40, type: "chest", stance: "standing", shots: 1 },
+  { order: 8, distance: 45, type: "chest", stance: "standing", shots: 1 },
+  { order: 9, distance: 50, type: "chest", stance: "standing", shots: 1 },
+  { order: 10, distance: 50, type: "chest", stance: "kneeling", shots: 1 },
+];
+
+export const PRESET_SHORT: Target[] = [
+  { order: 1, distance: 10, type: "chest", stance: "standing", shots: 1 },
+  { order: 2, distance: 15, type: "chest", stance: "standing", shots: 1 },
+  { order: 3, distance: 20, type: "chest", stance: "kneeling", shots: 1 },
+];
 
 // утилиты
 export const DEFAULT_META: DrillMeta = { withVest: false, withRun: false };
