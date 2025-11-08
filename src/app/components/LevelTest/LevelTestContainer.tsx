@@ -5,12 +5,12 @@ import TargetCard from "./TargetCard";
 import ReloadControls from "./ReloadControls";
 import HitMissButtons from "./HitMissButtons";
 import ResultsPanel from "./ResultsPanel";
-import TestModes, { TestConfig, PRESET_LEVEL } from "./TestModes";
+import TestModes from "./TestModes";
 import { vibrate, formatSec } from "../ui/utils";
+import { PRESET_LEVEL, TestConfig, Target } from "../types/drill";
 
 type RunState = "idle" | "running" | "reached_line" | "reloading" | "finished";
 type Stance = "standing" | "kneeling";
-type Target = { order: number; distance: number; type: string; stance: Stance };
 
 export default function LevelTestContainer() {
   /** Config: selected mode, sequence of targets, reload point */

@@ -1,12 +1,10 @@
 "use client";
 
-
 import React from "react";
 import {
   TestConfig,
   Target,
   Mode,
-  PRESET_LEVEL,
   PRESET_SHORT,
   cloneSeq,
   normalizeSeq,
@@ -40,17 +38,26 @@ export default function TestModes({
   const setMode = (m: Mode) => {
     if (disabled) return;
     if (m === "level") {
-      onChange({ mode: "level", seq: cloneSeq(PRESET_LEVEL), reloadAfter: 5 });
+      onChange({ mode: "level", seq: cloneSeq(value.seq), reloadAfter: 5 });
     } else if (m === "short") {
-      onChange({ mode: "short", seq: cloneSeq(PRESET_SHORT), reloadAfter: null });
+      onChange({
+        mode: "short",
+        seq: cloneSeq(PRESET_SHORT),
+        reloadAfter: null,
+      });
     } else {
-      const base =
+      const base: Target[] =
         seq?.length > 0
           ? normalizeSeq(seq)
           : [
               { order: 1, distance: 50, type: "chest", stance: "standing" },
               { order: 2, distance: 70, type: "half-head", stance: "standing" },
-              { order: 3, distance: 100, type: "full-body", stance: "kneeling" },
+              {
+                order: 3,
+                distance: 100,
+                type: "full-body",
+                stance: "kneeling",
+              },
             ];
       onChange({ mode: "custom", seq: base, reloadAfter: null });
     }
@@ -68,7 +75,12 @@ export default function TestModes({
     if (disabled) return;
     const next: Target[] = [
       ...seq,
-      { order: seq.length + 1, distance: 50, type: "chest", stance: "standing" },
+      {
+        order: seq.length + 1,
+        distance: 50,
+        type: "chest",
+        stance: "standing",
+      },
     ];
     onChange({ ...value, seq: normalizeSeq(next) });
   };
@@ -105,13 +117,25 @@ export default function TestModes({
     <div className="mb-4">
       {/* Режимы */}
       <div className="mb-3 flex flex-wrap gap-2">
-        <button onClick={() => setMode("level")} disabled={disabled} className={modeBtn(mode === "level", disabled)}>
+        <button
+          onClick={() => setMode("level")}
+          disabled={disabled}
+          className={modeBtn(mode === "level", disabled)}
+        >
           Level Test (10)
         </button>
-        <button onClick={() => setMode("short")} disabled={disabled} className={modeBtn(mode === "short", disabled)}>
+        <button
+          onClick={() => setMode("short")}
+          disabled={disabled}
+          className={modeBtn(mode === "short", disabled)}
+        >
           Short Drill (3)
         </button>
-        <button onClick={() => setMode("custom")} disabled={disabled} className={modeBtn(mode === "custom", disabled)}>
+        <button
+          onClick={() => setMode("custom")}
+          disabled={disabled}
+          className={modeBtn(mode === "custom", disabled)}
+        >
           Custom Drill
         </button>
       </div>
@@ -129,7 +153,6 @@ export default function TestModes({
             seq={seq}
             reloadAfter={reloadAfter}
             onChange={(next) => onChange({ ...value, ...next })}
-            disabled={disabled}
           />
 
           {/* Простой редактор как раньше (можно позже убрать, если CustomBuilder всё закрывает) */}
@@ -143,7 +166,9 @@ export default function TestModes({
                     type="number"
                     min={1}
                     value={t.distance}
-                    onChange={(e) => updateTarget(idx, { distance: Number(e.target.value) })}
+                    onChange={(e) =>
+                      updateTarget(idx, { distance: Number(e.target.value) })
+                    }
                     className="w-full border rounded px-2 py-1 border-zinc-300 dark:border-zinc-600 bg-white text-black dark:bg-black dark:text-white"
                     placeholder="m"
                   />
@@ -151,7 +176,11 @@ export default function TestModes({
                 <div className="col-span-4">
                   <select
                     value={t.type}
-                    onChange={(e) => updateTarget(idx, { type: e.target.value })}
+                    onChange={(e) =>
+                      updateTarget(idx, {
+                        type: e.target.value as Target["type"],
+                      })
+                    }
                     className="w-full border rounded px-2 py-1 border-zinc-300 dark:border-zinc-600 bg-white text-black dark:bg-black dark:text-white"
                   >
                     <option value="chest">chest</option>
@@ -162,7 +191,11 @@ export default function TestModes({
                 <div className="col-span-3">
                   <select
                     value={t.stance}
-                    onChange={(e) => updateTarget(idx, { stance: e.target.value as Target["stance"] })}
+                    onChange={(e) =>
+                      updateTarget(idx, {
+                        stance: e.target.value as Target["stance"],
+                      })
+                    }
                     className="w-full border rounded px-2 py-1 border-zinc-300 dark:border-zinc-600 bg-white text-black dark:bg-black dark:text-white"
                   >
                     <option value="standing">standing</option>
@@ -174,10 +207,16 @@ export default function TestModes({
           </div>
 
           <div className="flex gap-2 mt-3">
-            <button className="px-3 py-2 rounded border border-zinc-300 dark:border-zinc-600" onClick={addTarget}>
+            <button
+              className="px-3 py-2 rounded border border-zinc-300 dark:border-zinc-600"
+              onClick={addTarget}
+            >
               Add target
             </button>
-            <button className="px-3 py-2 rounded border border-zinc-300 dark:border-zinc-600" onClick={removeLastTarget}>
+            <button
+              className="px-3 py-2 rounded border border-zinc-300 dark:border-zinc-600"
+              onClick={removeLastTarget}
+            >
               Remove last
             </button>
           </div>
@@ -192,11 +231,14 @@ export default function TestModes({
               onChange={(e) => setReloadAfter(e.target.value)}
               className="w-24 border rounded px-2 py-1 border-zinc-300 dark:border-zinc-600 bg-white text-black dark:bg-black dark:text-white"
             />
-            <span className="text-xs opacity-70">leave empty for no reload</span>
+            <span className="text-xs opacity-70">
+              leave empty for no reload
+            </span>
           </div>
 
           <div className="mt-1 text-xs opacity-60">
-            Valid values: 1 … {Math.max(1, seq.length - 1)} (reload happens between shot N and N+1)
+            Valid values: 1 … {Math.max(1, seq.length - 1)} (reload happens
+            between shot N and N+1)
           </div>
         </div>
       )}
