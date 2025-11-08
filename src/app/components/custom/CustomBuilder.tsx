@@ -42,7 +42,7 @@ export default function CustomBuilder({ seq, reloadAfter, onChange }: Props) {
           })
         }
       >
-        ➕ Добавить цель
+        Add target
       </button>
     </div>
   );
