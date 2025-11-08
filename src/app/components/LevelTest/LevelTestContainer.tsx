@@ -5,6 +5,7 @@ import TargetCard from "./TargetCard";
 import ReloadControls from "./ReloadControls";
 import HitMissButtons from "./HitMissButtons";
 import ResultsPanel from "./ResultsPanel";
+import SessionExporter from "./SessionExporter";
 import TestModes from "./TestModes";
 import { vibrate, formatSec } from "../ui/utils";
 import { PRESET_LEVEL, TestConfig, Target } from "../types/drill";
@@ -47,8 +48,35 @@ export default function LevelTestContainer() {
   /** Animation frame для обновления таймера */
   const rafRef = useRef<number | null>(null);
   const [now, setNow] = useState(0);
+
+  const [sessions, setSessions] = useState<Session[]>([]);
+
+  const saveSession = () => {
+    if (!shooterSaved || runState !== "finished") return;
+
+    const session: Session = {
+      id: Math.random().toString(36).substring(7),
+      name: `${shooterSaved || ""} - ${config.mode} - ${new Date().toLocaleString()}`,
+      shooterName: shooterSaved || "",
+      date: new Date().toISOString().split('T')[0],
+      startedAt: new Date(t0.current || 0).toISOString(),
+      config: config,
+      total: (elapsedMs / 1000).toFixed(2),
+      timeToLine: timeToLine ? timeToLine.toFixed(2) : undefined,
+      reloadTime: reloadSecondsFinal ? reloadSecondsFinal.toFixed(2) : undefined,
+      hits: hits,
+      seq: seq,
+    };
+    setSessions((prev) => [...prev, session]);
+  };
+
   useEffect(() => {
-    if (runState === "idle" || runState === "finished") return;
+    console.log("Current sessions in LevelTestContainer:", sessions);
+    if (runState === "finished") {
+      saveSession();
+      return;
+    }
+    if (runState === "idle") return; // Only return if idle, to allow finished state to process
     const tick = () => {
       setNow(performance.now());
       rafRef.current = requestAnimationFrame(tick);
@@ -57,7 +85,7 @@ export default function LevelTestContainer() {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [runState]);
+  }, [runState, shooterSaved, config, hits, seq, t0, sessions]);
 
   /** Reset hits array when sequence changes in idle state */
   useEffect(() => {
@@ -312,6 +340,7 @@ export default function LevelTestContainer() {
           seq={seq}
           onExport={() => {
             vibrate();
+
             const rows: string[] = [];
             rows.push("Shooter,Mode,Targets,TotalTime,TimeToLine,ReloadTime,HitCount");
             const hitCount = hits.slice(0, seqLen).filter((h) => h).length;
@@ -341,6 +370,8 @@ export default function LevelTestContainer() {
           }}
         />
       )}
+
+      <SessionExporter sessions={sessions} />
     </div>
   );
 }

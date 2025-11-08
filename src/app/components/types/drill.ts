@@ -32,6 +32,11 @@ export type Session = {
   date: string;
   startedAt: string;
   config: TestConfig;
+  total: string; // Add total time in seconds as a string
+  timeToLine?: string; // Optional time to line as a string
+  reloadTime?: string; // Optional reload time as a string
+  hits: (boolean | null)[]; // Array of hit/miss results
+  seq: Target[]; // The sequence of targets for the session
 };
 
 export const PRESET_LEVEL: Target[] = [
