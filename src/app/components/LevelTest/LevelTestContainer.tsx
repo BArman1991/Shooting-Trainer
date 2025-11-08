@@ -8,7 +8,7 @@ import ResultsPanel from "./ResultsPanel";
 import SessionExporter from "./SessionExporter";
 import TestModes from "./TestModes";
 import { vibrate, formatSec } from "../ui/utils";
-import { PRESET_LEVEL, TestConfig, Target } from "../types/drill";
+import { PRESET_LEVEL, TestConfig, Target, Session } from "../types/drill";
 
 type RunState = "idle" | "running" | "reached_line" | "reloading" | "finished";
 type Stance = "standing" | "kneeling";
@@ -56,14 +56,18 @@ export default function LevelTestContainer() {
 
     const session: Session = {
       id: Math.random().toString(36).substring(7),
-      name: `${shooterSaved || ""} - ${config.mode} - ${new Date().toLocaleString()}`,
+      name: `${shooterSaved || ""} - ${
+        config.mode
+      } - ${new Date().toLocaleString()}`,
       shooterName: shooterSaved || "",
-      date: new Date().toISOString().split('T')[0],
+      date: new Date().toISOString().split("T")[0],
       startedAt: new Date(t0.current || 0).toISOString(),
       config: config,
       total: (elapsedMs / 1000).toFixed(2),
       timeToLine: timeToLine ? timeToLine.toFixed(2) : undefined,
-      reloadTime: reloadSecondsFinal ? reloadSecondsFinal.toFixed(2) : undefined,
+      reloadTime: reloadSecondsFinal
+        ? reloadSecondsFinal.toFixed(2)
+        : undefined,
       hits: hits,
       seq: seq,
     };
@@ -204,7 +208,8 @@ export default function LevelTestContainer() {
   /** Безопасно получаем текущую цель */
   const idx = Math.max(0, Math.min(seqLen - 1, currentShot - 1));
   const currentTarget = seqLen > 0 ? seq[idx] : undefined;
-  const canShoot = runState === "reached_line" && seqLen > 0 && currentShot <= seqLen;
+  const canShoot =
+    runState === "reached_line" && seqLen > 0 && currentShot <= seqLen;
 
   /** UI */
   return (
@@ -294,7 +299,9 @@ export default function LevelTestContainer() {
       </div>
 
       {/* Target card */}
-      {currentShot <= seqLen && currentTarget && <TargetCard target={currentTarget} />}
+      {currentShot <= seqLen && currentTarget && (
+        <TargetCard target={currentTarget} />
+      )}
 
       {/* Reload controls */}
       {runState === "reloading" && (
@@ -335,14 +342,18 @@ export default function LevelTestContainer() {
           shooter={shooterSaved || ""}
           total={(elapsedMs / 1000).toFixed(2)}
           timeToLine={timeToLine ? timeToLine.toFixed(2) : undefined}
-          reloadTime={reloadSecondsFinal ? reloadSecondsFinal.toFixed(2) : undefined}
+          reloadTime={
+            reloadSecondsFinal ? reloadSecondsFinal.toFixed(2) : undefined
+          }
           hits={hits}
           seq={seq}
           onExport={() => {
             vibrate();
 
             const rows: string[] = [];
-            rows.push("Shooter,Mode,Targets,TotalTime,TimeToLine,ReloadTime,HitCount");
+            rows.push(
+              "Shooter,Mode,Targets,TotalTime,TimeToLine,ReloadTime,HitCount"
+            );
             const hitCount = hits.slice(0, seqLen).filter((h) => h).length;
             rows.push(
               [
@@ -357,14 +368,20 @@ export default function LevelTestContainer() {
             );
             rows.push("Shot,Distance,Type,Stance,Result");
             seq.forEach((t, i) => {
-              const res = hits[i] === true ? "HIT" : hits[i] === false ? "MISS" : "";
+              const res =
+                hits[i] === true ? "HIT" : hits[i] === false ? "MISS" : "";
               rows.push([i + 1, t.distance, t.type, t.stance, res].join(","));
             });
-            const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+            const blob = new Blob([rows.join("\n")], {
+              type: "text/csv;charset=utf-8;",
+            });
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = `result_${(shooterSaved || "shooter").replace(/\s+/g, "_")}.csv`;
+            a.download = `result_${(shooterSaved || "shooter").replace(
+              /\s+/g,
+              "_"
+            )}.csv`;
             a.click();
             URL.revokeObjectURL(url);
           }}
