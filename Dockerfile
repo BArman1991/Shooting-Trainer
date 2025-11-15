@@ -4,17 +4,20 @@ FROM node:22-slim AS development
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json first to leverage Docker cache
-# This means npm ci will only re-run if package*.json changes
+# Copy src directory first
+COPY src ./src
+
+# Set the working directory for Next.js app
+WORKDIR /app/src
+
+# Copy package.json and package-lock.json to src directory
 COPY package.json ./
 COPY package-lock.json ./
 
 # Install dependencies (npm ci is preferred for reproducible builds)
 RUN npm ci
-RUN npm run build
 
-# Copy the rest of the application code
-COPY . .
+RUN npm run build
 
 # Expose the port Next.js runs on
 EXPOSE 3000
