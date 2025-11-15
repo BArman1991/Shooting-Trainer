@@ -11,6 +11,7 @@ COPY package-lock.json ./
 
 # Install dependencies (npm ci is preferred for reproducible builds)
 RUN npm ci
+RUN npm run build
 
 # Copy the rest of the application code
 COPY . .
@@ -18,5 +19,5 @@ COPY . .
 # Expose the port Next.js runs on
 EXPOSE 3000
 
-# Command to run the development server
+# Command to run the production server
 CMD ["npm", "start"]
