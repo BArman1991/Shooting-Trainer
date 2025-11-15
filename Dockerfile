@@ -18,9 +18,5 @@ COPY . .
 # Expose the port Next.js runs on
 EXPOSE 3000
 
-# Environment variables for hot reloading (useful in Docker for development)
-ENV CHOKIDAR_USEPOLLING=true
-ENV WATCHPACK_POLLING=true
-
 # Command to run the development server
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
