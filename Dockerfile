@@ -1,15 +1,26 @@
-FROM node:22-alpine
+# Use a Node.js image with Alpine for a smaller footprint
+FROM node:22-slim AS development
 
+# Set the working directory inside the container
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci || npm install
+# Copy package.json and package-lock.json first to leverage Docker cache
+# This means npm ci will only re-run if package*.json changes
+COPY package.json ./
+COPY package-lock.json ./
 
+# Install dependencies (npm ci is preferred for reproducible builds)
+RUN npm ci
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the port Next.js runs on
 EXPOSE 3000
 
+# Environment variables for hot reloading (useful in Docker for development)
 ENV CHOKIDAR_USEPOLLING=true
 ENV WATCHPACK_POLLING=true
 
-VOLUME ["/app/node_modules"]
-
+# Command to run the development server
 CMD ["npm", "run", "dev"]
