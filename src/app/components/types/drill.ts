@@ -4,15 +4,21 @@ export type TargetSize = "full" | "medium" | "small" | "custom";
 export type Target = {
   order: number;
   distance: number;
-  type: "chest" | "half-head" | "full-body";
-  stance: Stance;
+  type: "head" | "chest" | "half-body" | "body" | "half-head" | "full-body";
+  stance: "lying" | "half-squat" | "standing" | "kneeling";
   shots?: number; // по умолчанию 1
   size?: TargetSize; // по умолчанию 'full'
   sizeCm?: number; // если size === 'custom'
 };
 
-export type TargetType = "head" | "chest" | "half-body" | "body";
-export type ShootingPosition = "lying" | "half-squat" | "standing";
+export type TargetType =
+  | "head"
+  | "chest"
+  | "half-body"
+  | "body"
+  | "half-head"
+  | "full-body";
+export type ShootingPosition = "lying" | "half-squat" | "standing" | "kneeling";
 
 export type CustomTargetSpec = {
   distance: number;

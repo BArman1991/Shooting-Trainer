@@ -141,30 +141,7 @@ export default function TestModes({
         </button>
       </div>
 
-      {mode === "custom" && (
-        <div
-          className={`border rounded-lg p-3 bg-zinc-50 dark:bg-zinc-900 border-zinc-300 dark:border-zinc-600 ${
-            disabled ? "opacity-60 pointer-events-none" : ""
-          }`}
-        >
-          <div className="mb-3">
-            <Link href="/custom-drill-editor">
-              <button
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
-                disabled={disabled}
-              >
-                Create Custom Drill
-              </button>
-            </Link>
-          </div>
-
-          <CustomDrillSelector
-            value={value}
-            onChange={onChange}
-            disabled={disabled}
-          />
-        </div>
-      )}
+      {/* removed custom drill builder here */}
     </div>
   );
 }

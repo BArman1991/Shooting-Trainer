@@ -7,8 +7,8 @@ import {
   CustomTargetSpec,
   TargetType,
   ShootingPosition,
-} from "../components/types/drill";
-import LargeButton from "../components/ui/LargeButton"; // Assuming LargeButton exists
+} from "../types/drill";
+import LargeButton from "../ui/LargeButton"; // Assuming LargeButton exists
 import { useRouter } from "next/navigation";
 
 const defaultTarget: CustomTargetSpec = {
@@ -17,12 +17,36 @@ const defaultTarget: CustomTargetSpec = {
   shootingPosition: "standing",
 };
 
-export default function CustomDrillEditor() {
+export default function DrillEditor({
+  drillId,
+}: { drillId?: string }) {
   const [drillName, setDrillName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [targets, setTargets] = useState<CustomTargetSpec[]>([defaultTarget]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
+
+  React.useEffect(() => {
+    if (drillId) {
+      try {
+        const existingDrillsString = localStorage.getItem("customDrills:v1");
+        const existingDrills: CustomDrill[] = existingDrillsString
+          ? JSON.parse(existingDrillsString)
+          : [];
+        const drillToEdit = existingDrills.find((d) => d.id === drillId);
+        if (drillToEdit) {
+          setDrillName(drillToEdit.name);
+          setDescription(drillToEdit.description || "");
+          setTargets(drillToEdit.targets);
+        } else {
+          setErrorMessage("Drill not found.");
+        }
+      } catch (error) {
+        setErrorMessage("Failed to load drill for editing.");
+        console.error("Error loading drill:", error);
+      }
+    }
+  }, [drillId]);
 
   const handleAddTarget = () => {
     setTargets([...targets, { ...defaultTarget }]);
@@ -60,23 +84,43 @@ export default function CustomDrillEditor() {
       }
     }
 
-    const newDrill: CustomDrill = {
-      id: uuidv4(),
-      name: drillName,
-      description: description.trim() === "" ? undefined : description,
-      targets,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
     try {
       const existingDrillsString = localStorage.getItem("customDrills:v1");
       const existingDrills: CustomDrill[] = existingDrillsString
         ? JSON.parse(existingDrillsString)
         : [];
+
+      let updatedDrills: CustomDrill[];
+
+      if (drillId) {
+        // Update existing drill
+        updatedDrills = existingDrills.map((d) =>
+          d.id === drillId
+            ? {
+                ...d,
+                name: drillName,
+                description: description.trim() === "" ? undefined : description,
+                targets,
+                updatedAt: new Date().toISOString(),
+              }
+            : d
+        );
+      } else {
+        // Create new drill
+        const newDrill: CustomDrill = {
+          id: uuidv4(),
+          name: drillName,
+          description: description.trim() === "" ? undefined : description,
+          targets,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        updatedDrills = [...existingDrills, newDrill];
+      }
+
       localStorage.setItem(
         "customDrills:v1",
-        JSON.stringify([...existingDrills, newDrill])
+        JSON.stringify(updatedDrills)
       );
       alert("Drill saved successfully!");
       router.push("/");
@@ -92,7 +136,9 @@ export default function CustomDrillEditor() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Create Custom Drill</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        {drillId ? "Edit Custom Drill" : "Create Custom Drill"}
+      </h1>
 
       {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>}
 

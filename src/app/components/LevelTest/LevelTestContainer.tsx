@@ -13,13 +13,17 @@ import { PRESET_LEVEL, TestConfig, Target, Session } from "../types/drill";
 type RunState = "idle" | "running" | "reached_line" | "reloading" | "finished";
 type Stance = "standing" | "kneeling";
 
-export default function LevelTestContainer() {
+export default function LevelTestContainer({
+  initialConfig,
+}: { initialConfig?: TestConfig }) {
   /** Config: selected mode, sequence of targets, reload point */
-  const [config, setConfig] = useState<TestConfig>({
-    mode: "level",
-    seq: PRESET_LEVEL,
-    reloadAfter: 5,
-  });
+  const [config, setConfig] = useState<TestConfig>(
+    initialConfig || {
+      mode: "level",
+      seq: PRESET_LEVEL,
+      reloadAfter: 5,
+    }
+  );
 
   /** Shooter name */
   const [shooterName, setShooterName] = useState("");
@@ -219,11 +223,13 @@ export default function LevelTestContainer() {
       <h1 className="text-2xl font-bold mb-3">Shooting Trainer</h1>
 
       {/* Modes */}
-      <TestModes
-        value={config}
-        onChange={setConfig}
-        disabled={runState !== "idle"}
-      />
+      {!initialConfig && (
+        <TestModes
+          value={config}
+          onChange={setConfig}
+          disabled={runState !== "idle"}
+        />
+      )}
 
       {/* Shooter name */}
       {(runState === "idle" || runState === "finished") && (
