@@ -9,6 +9,7 @@ import {
   ShootingPosition,
 } from "../components/types/drill";
 import LargeButton from "../components/ui/LargeButton"; // Assuming LargeButton exists
+import { useRouter } from "next/navigation";
 
 const defaultTarget: CustomTargetSpec = {
   distance: 10,
@@ -21,6 +22,7 @@ export default function CustomDrillEditor() {
   const [description, setDescription] = useState<string>("");
   const [targets, setTargets] = useState<CustomTargetSpec[]>([defaultTarget]);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const router = useRouter();
 
   const handleAddTarget = () => {
     setTargets([...targets, { ...defaultTarget }]);
@@ -77,6 +79,7 @@ export default function CustomDrillEditor() {
         JSON.stringify([...existingDrills, newDrill])
       );
       alert("Drill saved successfully!");
+      router.push("/");
       // Optionally reset form or redirect
       setDrillName("");
       setDescription("");
@@ -212,8 +215,11 @@ export default function CustomDrillEditor() {
         Add target
       </button>
 
-      <div>
+      <div className="flex gap-4">
         <LargeButton onClick={handleSaveDrill}>Save Drill</LargeButton>
+        <LargeButton onClick={() => router.push("/")}>
+          Back to Main Page
+        </LargeButton>
       </div>
     </div>
   );
