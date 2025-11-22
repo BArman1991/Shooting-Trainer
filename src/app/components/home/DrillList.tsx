@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import NavButton from "@/app/components/ui/NavButton";
+import ActionButton from "@/app/components/ui/ActionButton";
 import { CustomDrill, PRESET_LEVEL, PRESET_SHORT, Target } from "../types/drill";
+import { useRouter } from "next/navigation";
 
 type DrillItem = {
   id: string;
@@ -16,6 +17,7 @@ type DrillListProps = {
 };
 
 export default function DrillList({ allDrills }: DrillListProps) {
+  const router = useRouter();
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-xl font-semibold mb-3">Available Drills</h2>
@@ -30,21 +32,19 @@ export default function DrillList({ allDrills }: DrillListProps) {
               <p className="text-sm opacity-70 mb-2">{drill.description}</p>
             )}
             <div className="flex gap-2 mt-2">
-              <NavButton
-                href={`/drills/${drill.id}/run`}
-                variant="success"
-                size="small"
+              <ActionButton
+                onClick={() => router.push(`/drills/${drill.id}/run`)}
+                variant="primary"
               >
                 Run
-              </NavButton>
+              </ActionButton>
               {drill.id !== "level" && drill.id !== "short" && (
-                <NavButton
-                  href={`/drills/${drill.id}/edit`}
+                <ActionButton
+                  onClick={() => router.push(`/drills/${drill.id}/edit`)}
                   variant="primary"
-                  size="small"
                 >
                   Edit
-                </NavButton>
+                </ActionButton>
               )}
             </div>
           </div>
