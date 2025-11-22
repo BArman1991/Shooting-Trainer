@@ -11,6 +11,7 @@ import {
   CustomDrill,
 } from "../types/drill";
 import Link from "next/link";
+import NavButton from "../ui/NavButton";
 
 /** Кнопки режимов */
 const modeBtn = (active: boolean, disabled?: boolean) =>
@@ -132,124 +133,8 @@ export default function TestModes({
         >
           Short Drill (3)
         </button>
-        <button
-          onClick={() => setMode("custom")}
-          disabled={disabled}
-          className={modeBtn(mode === "custom", disabled)}
-        >
-          Custom Drill
-        </button>
       </div>
-
-      {/* removed custom drill builder here */}
-    </div>
-  );
-}
-
-type CustomDrillSelectorProps = {
-  value: TestConfig;
-  onChange: (next: TestConfig) => void;
-  disabled?: boolean;
-};
-
-function CustomDrillSelector({
-  value,
-  onChange,
-  disabled = false,
-}: CustomDrillSelectorProps) {
-  const [savedDrills, setSavedDrills] = useState<CustomDrill[]>([]);
-  const [selectedDrillId, setSelectedDrillId] = useState<string | null>(null);
-
-  useEffect(() => {
-    loadDrills();
-  }, []);
-
-  const loadDrills = () => {
-    try {
-      const existingDrillsString = localStorage.getItem("customDrills:v1");
-      const drills: CustomDrill[] = existingDrillsString
-        ? JSON.parse(existingDrillsString)
-        : [];
-      setSavedDrills(drills);
-      if (drills.length > 0 && !selectedDrillId) {
-        setSelectedDrillId(drills[0].id);
-        applyDrill(drills[0]);
-      }
-    } catch (error) {
-      console.error("Failed to load custom drills:", error);
-    }
-  };
-
-  const applyDrill = (drill: CustomDrill) => {
-    const newSeq: Target[] = drill.targets.map((targetSpec, index) => ({
-      order: index + 1,
-      distance: targetSpec.distance,
-      type: (() => {
-        switch (targetSpec.targetType) {
-          case "head":
-            return "half-head";
-          case "chest":
-            return "chest";
-          case "half-body":
-            return "full-body"; // Closest match
-          case "body":
-            return "full-body";
-          default:
-            return "chest"; // Default fallback
-        }
-      })(),
-      stance: (() => {
-        switch (targetSpec.shootingPosition) {
-          case "lying":
-            return "kneeling"; // Closest match
-          case "half-squat":
-            return "standing"; // Closest match
-          case "standing":
-            return "standing";
-          default:
-            return "standing"; // Default fallback
-        }
-      })(),
-      shots: 1, // Default shots to 1 for custom drills
-    }));
-    onChange({
-      mode: "custom",
-      seq: normalizeSeq(newSeq),
-      reloadAfter: null, // For now, no reload after for custom drills, can be added later
-      meta: { ...(value.meta || {}), drillName: drill.name, drillId: drill.id }, // Add drillName and drillId to meta
-    });
-  };
-
-  const handleDrillSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const id = e.target.value;
-    setSelectedDrillId(id);
-    const selectedDrill = savedDrills.find((drill) => drill.id === id);
-    if (selectedDrill) {
-      applyDrill(selectedDrill);
-    }
-  };
-
-  return (
-    <div className="mt-4">
-      <h2 className="text-xl font-semibold mb-2">Select a Custom Drill</h2>
-      {savedDrills.length === 0 ? (
-        <p className="text-sm opacity-70">
-          No custom drills saved yet. Create one above!
-        </p>
-      ) : (
-        <select
-          className="border rounded px-3 py-2 w-full dark:bg-zinc-800 dark:border-zinc-700"
-          value={selectedDrillId || ""}
-          onChange={handleDrillSelect}
-          disabled={disabled}
-        >
-          {savedDrills.map((drill) => (
-            <option key={drill.id} value={drill.id}>
-              {drill.name}
-            </option>
-          ))}
-        </select>
-      )}
+      <NavButton href="/" variant="secondary" size="medium" className="mt-4">Back to Main Page</NavButton>
     </div>
   );
 }

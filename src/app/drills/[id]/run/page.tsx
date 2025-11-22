@@ -14,6 +14,7 @@ import {
   Stance,
 } from "../../../components/types/drill";
 import Link from "next/link";
+import NavButton from "../../../components/ui/NavButton";
 
 export default function RunDrillPage() {
   const params = useParams();
@@ -96,11 +97,7 @@ export default function RunDrillPage() {
   return (
     <div className="container mx-auto p-4">
       <div className="mb-4">
-        <Link href="/">
-          <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition">
-            Back to Main Page
-          </button>
-        </Link>
+        <NavButton href="/" variant="secondary" size="medium">Back to Main Page</NavButton>
       </div>
       <LevelTestContainer initialConfig={initialConfig} />
     </div>

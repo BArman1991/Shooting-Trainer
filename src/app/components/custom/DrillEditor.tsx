@@ -8,7 +8,8 @@ import {
   TargetType,
   ShootingPosition,
 } from "../types/drill";
-import LargeButton from "../ui/LargeButton"; // Assuming LargeButton exists
+import NavButton from "../ui/NavButton";
+import ActionButton from "../ui/ActionButton";
 import { useRouter } from "next/navigation";
 
 const defaultTarget: CustomTargetSpec = {
@@ -17,9 +18,7 @@ const defaultTarget: CustomTargetSpec = {
   shootingPosition: "standing",
 };
 
-export default function DrillEditor({
-  drillId,
-}: { drillId?: string }) {
+export default function DrillEditor({ drillId }: { drillId?: string }) {
   const [drillName, setDrillName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [targets, setTargets] = useState<CustomTargetSpec[]>([defaultTarget]);
@@ -99,7 +98,8 @@ export default function DrillEditor({
             ? {
                 ...d,
                 name: drillName,
-                description: description.trim() === "" ? undefined : description,
+                description:
+                  description.trim() === "" ? undefined : description,
                 targets,
                 updatedAt: new Date().toISOString(),
               }
@@ -118,10 +118,7 @@ export default function DrillEditor({
         updatedDrills = [...existingDrills, newDrill];
       }
 
-      localStorage.setItem(
-        "customDrills:v1",
-        JSON.stringify(updatedDrills)
-      );
+      localStorage.setItem("customDrills:v1", JSON.stringify(updatedDrills));
       alert("Drill saved successfully!");
       router.push("/");
       // Optionally reset form or redirect
@@ -244,28 +241,32 @@ export default function DrillEditor({
               </select>
             </div>
           </div>
-          <button
+          <ActionButton
             onClick={() => handleRemoveTarget(index)}
-            className="text-red-500 hover:text-red-700 p-2"
+            variant="danger"
+            className="p-2"
             title="Remove target"
           >
             🗑
-          </button>
+          </ActionButton>
         </div>
       ))}
 
-      <button
+      <ActionButton
         onClick={handleAddTarget}
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition mb-4"
+        variant="primary"
+        className="mb-4"
       >
         Add target
-      </button>
+      </ActionButton>
 
       <div className="flex gap-4">
-        <LargeButton onClick={handleSaveDrill}>Save Drill</LargeButton>
-        <LargeButton onClick={() => router.push("/")}>
+        <ActionButton onClick={handleSaveDrill} variant="primary">
+          Save Drill
+        </ActionButton>
+        <ActionButton onClick={() => router.push("/")} variant="secondary">
           Back to Main Page
-        </LargeButton>
+        </ActionButton>
       </div>
     </div>
   );

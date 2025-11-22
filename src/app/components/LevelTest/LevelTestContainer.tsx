@@ -9,6 +9,7 @@ import SessionExporter from "./SessionExporter";
 import TestModes from "./TestModes";
 import { vibrate, formatSec } from "../ui/utils";
 import { PRESET_LEVEL, TestConfig, Target, Session } from "../types/drill";
+import ActionButton from "../ui/ActionButton";
 
 type RunState = "idle" | "running" | "reached_line" | "reloading" | "finished";
 type Stance = "standing" | "kneeling";
@@ -277,33 +278,23 @@ export default function LevelTestContainer({
       )}
 
       <div className="flex gap-3 mb-6">
-        <button
+        <ActionButton
           onClick={startRun}
           disabled={runState !== "idle" || !shooterName.trim()}
-          className="rounded-xl px-4 py-2 border-2 border-black text-black
-               dark:border-white dark:text-white active:scale-[0.98]
-               disabled:!bg-transparent disabled:!text-zinc-600 disabled:!border-zinc-500
-               dark:disabled:!text-zinc-300 dark:disabled:!border-zinc-500"
+          variant="primary"
         >
           Start
-        </button>
-        <button
+        </ActionButton>
+        <ActionButton
           onClick={markReachedLine}
           disabled={runState !== "running"}
-          className="rounded-xl px-4 py-2 border-2 border-black text-black
-               dark:border-white dark:text-white active:scale-[0.98]
-               disabled:!bg-transparent disabled:!text-zinc-600 disabled:!border-zinc-500
-               dark:disabled:!text-zinc-300 dark:disabled:!border-zinc-500"
+          variant="primary"
         >
           Reached Line
-        </button>
-        <button
-          onClick={resetAll}
-          className="rounded-xl px-4 py-2 border-2 border-black text-black
-               dark:border-white dark:text-white active:scale-[0.98]"
-        >
+        </ActionButton>
+        <ActionButton onClick={resetAll} variant="reset">
           Reset
-        </button>
+        </ActionButton>
       </div>
 
       {/* Target card */}
