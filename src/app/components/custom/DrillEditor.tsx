@@ -8,7 +8,6 @@ import {
   TargetType,
   ShootingPosition,
 } from "../types/drill";
-import NavButton from "../ui/NavButton";
 import ActionButton from "../ui/ActionButton";
 import { useRouter } from "next/navigation";
 
@@ -61,7 +60,7 @@ export default function DrillEditor({ drillId }: { drillId?: string }) {
     value: string | number
   ) => {
     const newTargets = [...targets];
-    (newTargets[index] as any)[field] = value;
+    (newTargets[index] as CustomTargetSpec)[field] = value;
     setTargets(newTargets);
   };
 

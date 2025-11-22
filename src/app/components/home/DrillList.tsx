@@ -2,14 +2,20 @@
 
 import React from "react";
 import ActionButton from "@/app/components/ui/ActionButton";
-import { CustomDrill, PRESET_LEVEL, PRESET_SHORT, Target } from "../types/drill";
+import {
+  CustomDrill,
+  PRESET_LEVEL,
+  PRESET_SHORT,
+  Target,
+  CustomTargetSpec,
+} from "../types/drill";
 import { useRouter } from "next/navigation";
 
 type DrillItem = {
   id: string;
   name: string;
   description?: string;
-  targets: Target[];
+  targets: Target[] | CustomTargetSpec[];
 };
 
 type DrillListProps = {
