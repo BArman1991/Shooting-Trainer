@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Target, Stance, TargetSize } from "../types";
+import { Target, Stance, TargetSize } from "../types/drill";
 
 export default function TargetEditorRow({
   index,
@@ -21,7 +21,9 @@ export default function TargetEditorRow({
           type="number"
           min={1}
           value={t.distance}
-          onChange={(e) => onChange(index, { distance: Number(e.target.value) })}
+          onChange={(e) =>
+            onChange(index, { distance: Number(e.target.value) })
+          }
           className="w-full border rounded px-2 py-1 border-zinc-300 dark:border-zinc-600 bg-white text-black dark:bg-black dark:text-white"
           placeholder="m"
         />
@@ -30,7 +32,9 @@ export default function TargetEditorRow({
       <div className="col-span-3">
         <select
           value={t.type}
-          onChange={(e) => onChange(index, { type: e.target.value as Target["type"] })}
+          onChange={(e) =>
+            onChange(index, { type: e.target.value as Target["type"] })
+          }
           className="w-full border rounded px-2 py-1 border-zinc-300 dark:border-zinc-600 bg-white text-black dark:bg-black dark:text-white"
         >
           <option value="chest">chest</option>
@@ -42,7 +46,9 @@ export default function TargetEditorRow({
       <div className="col-span-2">
         <select
           value={t.stance}
-          onChange={(e) => onChange(index, { stance: e.target.value as Stance })}
+          onChange={(e) =>
+            onChange(index, { stance: e.target.value as Stance })
+          }
           className="w-full border rounded px-2 py-1 border-zinc-300 dark:border-zinc-600 bg-white text-black dark:bg-black dark:text-white"
         >
           <option value="standing">standing</option>
@@ -55,7 +61,9 @@ export default function TargetEditorRow({
           type="number"
           min={1}
           value={t.shots ?? 1}
-          onChange={(e) => onChange(index, { shots: Math.max(1, Number(e.target.value || 1)) })}
+          onChange={(e) =>
+            onChange(index, { shots: Math.max(1, Number(e.target.value || 1)) })
+          }
           className="w-full border rounded px-2 py-1 border-zinc-300 dark:border-zinc-600 bg-white text-black dark:bg-black dark:text-white"
           placeholder="shots"
         />
@@ -64,7 +72,12 @@ export default function TargetEditorRow({
       <div className="col-span-2">
         <select
           value={t.size ?? "full"}
-          onChange={(e) => onChange(index, { size: e.target.value as TargetSize, sizeCm: undefined })}
+          onChange={(e) =>
+            onChange(index, {
+              size: e.target.value as TargetSize,
+              sizeCm: undefined,
+            })
+          }
           className="w-full border rounded px-2 py-1 border-zinc-300 dark:border-zinc-600 bg-white text-black dark:bg-black dark:text-white"
         >
           <option value="full">full</option>
@@ -80,7 +93,9 @@ export default function TargetEditorRow({
             type="number"
             min={10}
             value={t.sizeCm ?? 150}
-            onChange={(e) => onChange(index, { sizeCm: Number(e.target.value) })}
+            onChange={(e) =>
+              onChange(index, { sizeCm: Number(e.target.value) })
+            }
             className="w-full border rounded px-2 py-1 border-zinc-300 dark:border-zinc-600 bg-white text-black dark:bg-black dark:text-white"
             placeholder="size (mm/cm)"
           />
