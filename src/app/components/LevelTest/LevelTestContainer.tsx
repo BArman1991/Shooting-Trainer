@@ -57,7 +57,9 @@ export default function LevelTestContainer() {
     const session: Session = {
       id: Math.random().toString(36).substring(7),
       name: `${shooterSaved || ""} - ${
-        config.mode
+        config.mode === "custom" && config.meta?.drillName
+          ? `Custom: ${config.meta.drillName}`
+          : config.mode
       } - ${new Date().toLocaleString()}`,
       shooterName: shooterSaved || "",
       date: new Date().toISOString().split("T")[0],
@@ -358,7 +360,9 @@ export default function LevelTestContainer() {
             rows.push(
               [
                 JSON.stringify(shooterSaved || ""),
-                config.mode,
+                config.mode === "custom" && config.meta?.drillName
+                  ? `Custom: ${config.meta.drillName}`
+                  : config.mode,
                 seqLen,
                 (elapsedMs / 1000).toFixed(2),
                 timeToLine ? timeToLine.toFixed(2) : "",
