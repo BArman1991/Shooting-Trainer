@@ -11,9 +11,29 @@ export type Target = {
   sizeCm?: number; // если size === 'custom'
 };
 
+export type TargetType = "head" | "chest" | "half-body" | "body";
+export type ShootingPosition = "lying" | "half-squat" | "standing";
+
+export type CustomTargetSpec = {
+  distance: number;
+  targetType: TargetType;
+  shootingPosition: ShootingPosition;
+};
+
+export type CustomDrill = {
+  id: string; // uuid
+  name: string;
+  description?: string;
+  targets: CustomTargetSpec[];
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type DrillMeta = {
   withVest: boolean;
   withRun: boolean;
+  drillName?: string;
+  drillId?: string;
 };
 
 export type Mode = "level" | "short" | "custom";
