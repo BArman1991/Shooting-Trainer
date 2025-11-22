@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 3000",
     "build": "next build",
-    "start": "next start -H 0.0.0.0 -p 3000",
+    "start": "next start -H 0.0.0.0 -p $PORT",
     "lint": "eslint",
     "deploy:heroku": "heroku container:push web -a shooting-trainer && heroku container:release web -a shooting-trainer",
     "docker:dev": "docker run --rm -it -p 3000:3000 -v \"$PWD\":/app -v shooting-trainer_nm:/app/node_modules --name shooting-trainer shooting-trainer-dev:latest"
