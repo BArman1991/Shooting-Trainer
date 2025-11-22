@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import LevelTestContainer from "../../../components/LevelTest/LevelTestContainer";
 import {
   CustomDrill,
@@ -13,12 +13,12 @@ import {
   TargetType,
   Stance,
 } from "../../../components/types/drill";
-import Link from "next/link";
-import NavButton from "../../../components/ui/NavButton";
+import ActionButton from "../../../components/ui/ActionButton";
 
 export default function RunDrillPage() {
   const params = useParams();
   const drillId = params.id as string;
+  const router = useRouter();
 
   const [initialConfig, setInitialConfig] = useState<TestConfig | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -97,7 +97,9 @@ export default function RunDrillPage() {
   return (
     <div className="container mx-auto p-4">
       <div className="mb-4">
-        <NavButton href="/" variant="secondary" size="medium">Back to Main Page</NavButton>
+        <ActionButton onClick={() => router.push("/")} variant="secondary">
+          Back to Main Page
+        </ActionButton>
       </div>
       <LevelTestContainer initialConfig={initialConfig} />
     </div>

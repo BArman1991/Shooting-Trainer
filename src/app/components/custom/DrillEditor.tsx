@@ -139,6 +139,15 @@ export default function DrillEditor({ drillId }: { drillId?: string }) {
 
       {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>}
 
+      <div className="flex justify-between items-center mb-4">
+        <ActionButton onClick={() => router.push("/")} variant="secondary">
+          Back to Main Page
+        </ActionButton>
+        <ActionButton onClick={handleSaveDrill} variant="primary">
+          Save Drill
+        </ActionButton>
+      </div>
+
       <div className="mb-4">
         <label htmlFor="drillName" className="block text-sm font-medium mb-1">
           Drill Name
@@ -171,6 +180,13 @@ export default function DrillEditor({ drillId }: { drillId?: string }) {
       </div>
 
       <h2 className="text-xl font-semibold mb-3">Targets</h2>
+      <ActionButton
+        onClick={handleAddTarget}
+        variant="primary"
+        className="mb-4"
+      >
+        Add target
+      </ActionButton>
       {targets.map((target: CustomTargetSpec, index: number) => (
         <div
           key={index}
@@ -251,23 +267,6 @@ export default function DrillEditor({ drillId }: { drillId?: string }) {
           </ActionButton>
         </div>
       ))}
-
-      <ActionButton
-        onClick={handleAddTarget}
-        variant="primary"
-        className="mb-4"
-      >
-        Add target
-      </ActionButton>
-
-      <div className="flex gap-4">
-        <ActionButton onClick={handleSaveDrill} variant="primary">
-          Save Drill
-        </ActionButton>
-        <ActionButton onClick={() => router.push("/")} variant="secondary">
-          Back to Main Page
-        </ActionButton>
-      </div>
     </div>
   );
 }
