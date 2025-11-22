@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import type { Target } from "../LevelTest/TestModes";
+import type { Target } from "../types/drill";
 
 type Props = {
   seq: Target[];
@@ -11,9 +11,7 @@ type Props = {
 
 export default function CustomBuilder({ seq, reloadAfter, onChange }: Props) {
   return (
-    <div
-      className="border rounded-lg p-3 bg-zinc-100 dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700"
-    >
+    <div className="border rounded-lg p-3 bg-zinc-100 dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700">
       <div className="font-semibold mb-2">🧱 Custom Drill Builder</div>
 
       <p className="text-sm opacity-70 mb-3">

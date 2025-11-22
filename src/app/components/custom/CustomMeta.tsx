@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { DrillMeta } from "../types";
+import { DrillMeta } from "../types/drill";
 
 export default function CustomMeta({
   meta,
