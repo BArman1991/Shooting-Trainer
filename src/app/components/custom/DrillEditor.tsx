@@ -60,7 +60,28 @@ export default function DrillEditor({ drillId }: { drillId?: string }) {
     value: string | number
   ) => {
     const newTargets = [...targets];
-    (newTargets[index] as CustomTargetSpec)[field] = value;
+    const targetToUpdate = newTargets[index];
+
+    switch (field) {
+      case "distance":
+        if (typeof value === "number") {
+          targetToUpdate.distance = value;
+        }
+        break;
+      case "targetType":
+        if (typeof value === "string") {
+          targetToUpdate.targetType = value as TargetType;
+        }
+        break;
+      case "shootingPosition":
+        if (typeof value === "string") {
+          targetToUpdate.shootingPosition = value as ShootingPosition;
+        }
+        break;
+      default:
+        console.warn(`Unhandled field: ${field}`);
+    }
+
     setTargets(newTargets);
   };
 
